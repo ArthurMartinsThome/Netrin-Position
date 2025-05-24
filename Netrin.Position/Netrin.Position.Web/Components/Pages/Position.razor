@@ -1,0 +1,82 @@
+﻿@page "/position"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<PageTitle>Posições</PageTitle>
+
+<h1>Posições</h1>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+        <button type="button" class="btn-close" @onclick="ClearError"></button>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-3 mb-3">
+        <label for="name" class="form-label">Nome:</label>
+        <InputText id="name" class="form-control" @bind-Value="currentPosition.Name" />
+    </div>
+    <div class="col-md-3 mb-3">
+        <label for="latitude" class="form-label">Latitude:</label>
+        <InputNumber id="latitude" class="form-control" @bind-Value="currentPosition.Latitude" Culture="System.Globalization.CultureInfo.InvariantCulture" />
+    </div>
+    <div class="col-md-3 mb-3">
+        <label for="longitude" class="form-label">Longitude:</label>
+        <InputNumber id="longitude" class="form-control" @bind-Value="currentPosition.Longitude" Culture="System.Globalization.CultureInfo.InvariantCulture" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="Save">Salvar</button>
+</div>
+
+<br />
+<br />
+
+@if (positions == null)
+{
+    <p><em>Carregando posições...</em></p>
+}
+else if (!positions.Any())
+{
+    <p>Nenhuma posição cadastrada ainda.</p>
+}
+else
+{
+    <div class="form-group col-md-4">
+        <label>Apenas ativos: </label>
+        <InputCheckbox @bind-Value="onlyActive" />
+        <button class="btn btn-primary" @onclick="LoadPositions">Pesquisar</button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var position in positions)
+            {
+                <tr>
+                    <td>@position.Name</td>
+                    <td>@position.Latitude</td>
+                    <td>@position.Longitude</td>
+                    <td>@position.Status</td>
+                    <td>
+                        @if (position.Status == Domain.Model.Enum.EStatus.Active)
+                        {
+                            <button class="btn btn-secondary btn-sm" @onclick="(() => EditPosition(position))">Editar</button>
+                            <button class="btn btn-danger btn-sm" @onclick="(() => DeletePosition(position))">Excluir</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

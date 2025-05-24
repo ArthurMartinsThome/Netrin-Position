@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Netrin.Position.Domain\Netrin.Position.Domain.csproj" />
+    <ProjectReference Include="..\Netrin.Position.Infra.MySql\Netrin.Position.Infra.MySql.csproj" />
+  </ItemGroup>
+
+</Project>
