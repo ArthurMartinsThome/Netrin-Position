@@ -10,12 +10,12 @@ namespace Netrin.Position.Web.Components.Pages
         private bool onlyActive = true;
         private string? errorMessage;
 
-        private PositionService PositionService = new();
+        private PositionService _positionService = new();
 
         protected override async Task OnInitializedAsync()
         {
             currentPosition = new Domain.Model.Position();
-            PositionService = new PositionService();
+            _positionService = new PositionService();
             await LoadPositions();
         }
 
@@ -24,7 +24,7 @@ namespace Netrin.Position.Web.Components.Pages
             errorMessage = null;
             try
             {
-                var resultSearch = await PositionService.Search(new Domain.Model.Filter.PositionFilter() { HideInactive = onlyActive });
+                var resultSearch = await _positionService.Search(new Domain.Model.Filter.PositionFilter() { HideInactive = onlyActive });
                 if (!resultSearch.Succeded)
                 {
                     errorMessage = resultSearch.Message;
@@ -43,7 +43,7 @@ namespace Netrin.Position.Web.Components.Pages
         {
             oldPosition = (Domain.Model.Position)obj.Clone();
             currentPosition = (Domain.Model.Position)obj.Clone();
-            StateHasChanged();            
+            StateHasChanged();
         }
 
         private async Task Save()
@@ -53,7 +53,7 @@ namespace Netrin.Position.Web.Components.Pages
             {
                 if (currentPosition.Id == null || currentPosition.Id == 0)
                 {
-                    var createdPosition = await PositionService.Insert(currentPosition);
+                    var createdPosition = await _positionService.Insert(currentPosition);
                     if (!createdPosition.Succeded)
                     {
                         errorMessage = createdPosition.Message;
@@ -62,7 +62,7 @@ namespace Netrin.Position.Web.Components.Pages
                 }
                 else
                 {
-                    var resultUpdate = await PositionService.Update(oldPosition, currentPosition);
+                    var resultUpdate = await _positionService.Update(oldPosition, currentPosition);
                     if (!resultUpdate.Succeded)
                     {
                         errorMessage = resultUpdate.Message;
@@ -73,12 +73,12 @@ namespace Netrin.Position.Web.Components.Pages
                 await LoadPositions();
                 currentPosition = new Domain.Model.Position();
                 oldPosition = new Domain.Model.Position();
-                StateHasChanged();                
+                StateHasChanged();
             }
             catch (Exception ex)
             {
                 errorMessage = $"Ocorreu um erro inesperado: {ex.Message}";
-            }            
+            }
         }
 
         private async Task DeletePosition(Domain.Model.Position obj)

@@ -1,0 +1,18 @@
+﻿@page "/map"
+@rendermode InteractiveServer
+@inject IJSRuntime JS
+
+<h1>Google Maps</h1>
+
+@if (isLoading)
+{
+    <p>Carregando dados dos pontos...</p>
+}
+else if (!hasData)
+{
+    <p>Nenhum ponto encontrado.</p>
+}
+else
+{
+    <div id="map" style="width: 100%; height: 500px;"></div>
+}

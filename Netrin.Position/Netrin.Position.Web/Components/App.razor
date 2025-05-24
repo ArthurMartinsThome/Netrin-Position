@@ -15,6 +15,127 @@
 <body>
     <Routes />
     <script src="_framework/blazor.web.js"></script>
-</body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgZevBdDbiKLUd3Q9QjSiInuBtRiEr2bk"></script>
+    <script>
+        window.initMap = function (allPoints, nearPositions)
+        {
+            const mapElement = document.getElementById('map');
 
+            if (!mapElement) 
+            {
+                console.error("Elemento do mapa com ID 'map' não encontrado no DOM.");
+                return;
+            }
+
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') 
+            {
+                console.error("API do Google Maps não carregada.");
+                return;
+            }
+
+            const bounds = new google.maps.LatLngBounds();
+            const map = new google.maps.Map(mapElement, 
+            {
+                zoom: 2,
+                center: 
+                { 
+                    lat: 0, 
+                    lng: 0 
+                }
+            });
+
+            if (allPoints && allPoints.length > 0) 
+            {
+                allPoints.forEach(point => 
+                {
+                    const myLatLng = { lat: point.latitude, lng: point.longitude };
+                    const marker = new google.maps.Marker(
+                    {
+                        position: myLatLng,
+                        map: map,
+                        title: point.name
+                    });
+
+                    bounds.extend(myLatLng);
+                });
+            } 
+            else 
+            {
+                console.log("Nenhum ponto fornecido para adicionar marcadores.");
+            }
+
+            if (nearPositions && nearPositions.length > 0)
+            {
+                nearPositions.forEach(position =>
+                {
+                    const positionBounds = new google.maps.LatLngBounds();
+                    position.forEach(point =>
+                    {
+                        positionBounds.extend(
+                        { 
+                            lat: point.latitude, 
+                            lng: point.longitude 
+                        });
+                    });
+
+                    const rectangleCoords = 
+                    [
+                        { 
+                            lat: positionBounds.getNorthEast().lat(), 
+                            lng: positionBounds.getNorthEast().lng() 
+                        },
+                        { 
+                            lat: positionBounds.getNorthEast().lat(), 
+                            lng: positionBounds.getSouthWest().lng() 
+                        },
+                        { 
+                            lat: positionBounds.getSouthWest().lat(), 
+                            lng: positionBounds.getSouthWest().lng() 
+                        },
+                        { 
+                            lat: positionBounds.getSouthWest().lat(), 
+                            lng: positionBounds.getNorthEast().lng() 
+                        }
+                    ];
+
+                    const nearPositionsSquare = new google.maps.Polygon(
+                    {
+                        paths: rectangleCoords,
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.15,
+                        map: map
+                    });
+                });
+            } 
+            else 
+            {
+                console.log("Nenhuma posição perto identificada para desenhar quadrados.");
+            }
+
+            if (allPoints && allPoints.length > 0) 
+            {
+                map.fitBounds(bounds, 50);
+            } 
+            else if (nearPositions && nearPositions.length > 0)
+            {
+                const allNearPositionsBounds = new google.maps.LatLngBounds();
+                nearPositions.forEach(position => 
+                {
+                    position.forEach(point => 
+                    {
+                        allNearPositionsBounds.extend(
+                        { 
+                            lat: point.latitude, 
+                            lng: point.longitude 
+                        });
+                    });
+                });
+                map.fitBounds(allNearPositionsBounds, 50);
+            }
+        };
+    </script>
+</body>
 </html>

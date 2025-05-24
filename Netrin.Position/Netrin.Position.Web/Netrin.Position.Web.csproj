@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\Counter.razor" />
+    <Content Remove="Components\Pages\Error.razor" />
+    <Content Remove="Components\Pages\Weather.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Netrin.Position.Application\Netrin.Position.Application.csproj" />
     <ProjectReference Include="..\Netrin.Position.Domain\Netrin.Position.Domain.csproj" />
   </ItemGroup>

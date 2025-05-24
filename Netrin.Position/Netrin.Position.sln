@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Netrin.Position.Infra", "Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Adapter.MySql", "Netrin.Position.Adapter.MySql\Netrin.Position.Adapter.MySql.csproj", "{C46BD3F3-CD59-4E2A-B91D-87CBBD955298}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Web", "Netrin.Position.Web\Netrin.Position.Web.csproj", "{8060CFA3-6784-4E9C-7B3D-85B39AF2EE09}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Domain", "Netrin.Position.Domain\Netrin.Position.Domain.csproj", "{5CF705C1-B523-453B-A474-692EDC12ED11}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Infra.MySql", "Netrin.Position.Infra.MySql\Netrin.Position.Infra.MySql.csproj", "{EB9B4DC9-CBA2-498E-B9A2-A3841CD64CE2}"
@@ -22,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Infra.Packages", "Netrin.Position.Infra.Packages\Netrin.Position.Infra.Packages.csproj", "{6BB0883E-FDB7-4F94-9758-68CD2CE37BED}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Application", "Netrin.Position.Application\Netrin.Position.Application.csproj", "{17528451-D7DC-401B-9FF3-300D2656B323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netrin.Position.Web", "Netrin.Position.Web\Netrin.Position.Web.csproj", "{F0969A26-3206-443F-BECA-25549043B9FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,6 @@ Global
 		{C46BD3F3-CD59-4E2A-B91D-87CBBD955298}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C46BD3F3-CD59-4E2A-B91D-87CBBD955298}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C46BD3F3-CD59-4E2A-B91D-87CBBD955298}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8060CFA3-6784-4E9C-7B3D-85B39AF2EE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8060CFA3-6784-4E9C-7B3D-85B39AF2EE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8060CFA3-6784-4E9C-7B3D-85B39AF2EE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8060CFA3-6784-4E9C-7B3D-85B39AF2EE09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5CF705C1-B523-453B-A474-692EDC12ED11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5CF705C1-B523-453B-A474-692EDC12ED11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CF705C1-B523-453B-A474-692EDC12ED11}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +49,10 @@ Global
 		{17528451-D7DC-401B-9FF3-300D2656B323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17528451-D7DC-401B-9FF3-300D2656B323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17528451-D7DC-401B-9FF3-300D2656B323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0969A26-3206-443F-BECA-25549043B9FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0969A26-3206-443F-BECA-25549043B9FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0969A26-3206-443F-BECA-25549043B9FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0969A26-3206-443F-BECA-25549043B9FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

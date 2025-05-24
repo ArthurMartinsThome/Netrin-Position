@@ -6,14 +6,6 @@
 
 <h1>Posições</h1>
 
-@if (!string.IsNullOrEmpty(errorMessage))
-{
-    <div class="alert alert-danger" role="alert">
-        @errorMessage
-        <button type="button" class="btn-close" @onclick="ClearError"></button>
-    </div>
-}
-
 <div class="row">
     <div class="col-md-3 mb-3">
         <label for="name" class="form-label">Nome:</label>
@@ -33,7 +25,6 @@
 
 <br />
 <br />
-
 @if (positions == null)
 {
     <p><em>Carregando posições...</em></p>
@@ -53,6 +44,7 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nome</th>
                 <th>Latitude</th>
                 <th>Longitude</th>
@@ -64,6 +56,7 @@ else
             @foreach (var position in positions)
             {
                 <tr>
+                    <td>@position.Id</td>
                     <td>@position.Name</td>
                     <td>@position.Latitude</td>
                     <td>@position.Longitude</td>

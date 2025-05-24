@@ -11,6 +11,7 @@ namespace Netrin.Position.Domain.Model
         public decimal? Longitude { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public bool Verified { get; set; } = false;
 
         public object Clone() => this.MemberwiseClone();
     }
