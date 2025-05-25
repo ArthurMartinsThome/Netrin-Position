@@ -1,4 +1,5 @@
-﻿using Netrin.Position.Domain.Interface;
+﻿using Castle.Core.Configuration;
+using Netrin.Position.Domain.Interface;
 using Netrin.Position.Domain.Model.Auxiliar;
 using Netrin.Position.Domain.Model.Enum;
 using Netrin.Position.Infra.MySql;
@@ -7,7 +8,8 @@ namespace Netrin.Position.Adapter.MySql.DataSource
 {
     public class PositionDataSource : BaseDataSource, IPositionDataSource
     {
-        public PositionDataSource() : base("Server=localhost;User Id=root;Database=netrin;Password=arthur123;") { }
+        public PositionDataSource() : base("Server=localhost;User Id=root;Database=netrin;Password=arthur123;") { } 
+        // passando a connection aqui para não ter problema na publicação e c onfiguração de Environment.
 
         #region SQL
         private const string _TableName = $"position";
@@ -45,6 +47,14 @@ namespace Netrin.Position.Adapter.MySql.DataSource
                 {_TableName}
                 [fieldsandvalues]
                 [where]";
+
+        public string Name => throw new NotImplementedException();
+
+        public string Value => throw new NotImplementedException();
+
+        public ConfigurationCollection Children => throw new NotImplementedException();
+
+        public ConfigurationAttributeCollection Attributes => throw new NotImplementedException();
 
         #endregion
 

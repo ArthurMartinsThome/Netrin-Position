@@ -1,0 +1,11 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+NuGet.config
+*.nuget.config
+
+.nuget/
+packages/
