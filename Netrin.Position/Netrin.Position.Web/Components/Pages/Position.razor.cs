@@ -14,9 +14,17 @@ namespace Netrin.Position.Web.Components.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            currentPosition = new Domain.Model.Position();
-            _positionService = new PositionService();
-            await LoadPositions();
+            errorMessage = null;
+            try
+            {
+                currentPosition = new Domain.Model.Position();
+                _positionService = new PositionService();
+                await LoadPositions();
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Ocorreu um erro inesperado: {ex.Message}";
+            }
         }
 
         private async Task LoadPositions()

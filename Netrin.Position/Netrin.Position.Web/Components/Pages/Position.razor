@@ -6,6 +6,14 @@
 
 <h1>Posições</h1>
 
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+        <button type="button" class="btn-close" @onclick="ClearError"></button>
+    </div>
+}
+
 <div class="row">
     <div class="col-md-3 mb-3">
         <label for="name" class="form-label">Nome:</label>

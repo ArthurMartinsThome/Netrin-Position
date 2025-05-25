@@ -15,91 +15,155 @@
 <body>
     <Routes />
     <script src="_framework/blazor.web.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgZevBdDbiKLUd3Q9QjSiInuBtRiEr2bk"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgZevBdDbiKLUd3Q9QjSiInuBtRiEr2bk&v=weekly"
+            defer></script>
     <script>
-        window.initMap = function (allPoints, nearPositions)
-        {
+
+        let myGoogleMapInstance = null;
+        let activeMarkers = new Map();
+        let activePolygons = [];
+        let originalMarkerIcons = new Map();
+
+        window.initMap = async function (allPositions, nearbyPositions) {
+            await google.maps.importLibrary("maps");
+            await google.maps.importLibrary("marker");
+
             const mapElement = document.getElementById('map');
 
-            if (!mapElement) 
-            {
-                console.error("Elemento do mapa com ID 'map' não encontrado no DOM.");
+            if (!mapElement) {
+                console.error("Elemento do mapa não encontrado.");
                 return;
             }
 
-            if (typeof google === 'undefined' || typeof google.maps === 'undefined') 
-            {
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
                 console.error("API do Google Maps não carregada.");
                 return;
             }
 
-            const bounds = new google.maps.LatLngBounds();
-            const map = new google.maps.Map(mapElement, 
-            {
-                zoom: 2,
-                center: 
-                { 
-                    lat: 0, 
-                    lng: 0 
-                }
-            });
+            activeMarkers.forEach(marker => marker.setMap(null));
+            activeMarkers.clear();
 
-            if (allPoints && allPoints.length > 0) 
-            {
-                allPoints.forEach(point => 
-                {
-                    const myLatLng = { lat: point.latitude, lng: point.longitude };
-                    const marker = new google.maps.Marker(
-                    {
+            activePolygons.forEach(polygon => polygon.setMap(null));
+            activePolygons = [];
+
+            if (myGoogleMapInstance) {
+                myGoogleMapInstance = null;
+            }
+
+            myGoogleMapInstance = new google.maps.Map(mapElement, {
+                zoom: 12,
+                center: {
+                    lat: -25.424893,
+                    lng: -49.267538
+                },
+                mapId: "8e3b60cc5db91b918619e800"
+            });
+            const map = myGoogleMapInstance;
+
+            const bounds = new google.maps.LatLngBounds();
+
+            if (allPositions && allPositions.length > 0) {
+                allPositions.forEach(point => {
+                    const myLatLng = {
+                        lat: point.latitude,
+                        lng: point.longitude
+                    };
+
+                    const marker = new google.maps.marker.AdvancedMarkerElement({
+                        map,
                         position: myLatLng,
-                        map: map,
-                        title: point.name
+                        title: point.name,
                     });
 
-                    bounds.extend(myLatLng);
+                    activeMarkers.set(point.id, marker);
+
+                    if (point.isVisibleOnMap) {
+                        bounds.extend(myLatLng);
+                    }
                 });
-            } 
-            else 
-            {
+            } else {
                 console.log("Nenhum ponto fornecido para adicionar marcadores.");
             }
 
-            if (nearPositions && nearPositions.length > 0)
-            {
-                nearPositions.forEach(position =>
-                {
-                    const positionBounds = new google.maps.LatLngBounds();
-                    position.forEach(point =>
-                    {
-                        positionBounds.extend(
-                        { 
-                            lat: point.latitude, 
-                            lng: point.longitude 
+            redrawSquares(nearbyPositions);
+
+            if (allPositions && allPositions.length > 0) {
+                map.fitBounds(bounds, 50);
+            } else if (nearbyPositions && nearbyPositions.length > 0) {
+                const nearbyPositionBounds = new google.maps.LatLngBounds();
+                nearbyPositions.forEach(nearbyPosition => {
+                    nearbyPosition.forEach(point => {
+                        nearbyPositionBounds.extend({
+                            lat: point.latitude,
+                            lng: point.longitude
+                        });
+                    });
+                });
+                map.fitBounds(nearbyPositionBounds, 50);
+            }
+        };
+
+        window.showMarker = function (pointId) {
+            const marker = activeMarkers.get(pointId);
+
+            if (marker) {
+                marker.map = myGoogleMapInstance;
+            } else {
+                console.warn(`Marcador não encontrado para o ponto ID: ${pointId}`);
+            }
+        };
+
+        window.hideMarker = function (pointId) {
+            const marker = activeMarkers.get(pointId);
+
+            if (marker) {
+                marker.map = null;
+            } else {
+                console.warn(`Marcador não encontrado para o ponto ID: ${pointId}`);
+            }
+        };
+
+        window.redrawSquares = function (nearbyPositionsList) {
+            const map = myGoogleMapInstance;
+
+            if (!map) {
+                console.error("Instância do mapa não encontrada. Não é possível desenhar polígonos.");
+                return;
+            }
+            if (typeof google === 'undefined' || typeof google.maps === 'undefined') {
+                console.error("API do Google Maps não carregada. Não é possível desenhar polígonos.");
+                return;
+            }
+
+            activePolygons.forEach(polygon => polygon.setMap(null));
+            activePolygons = [];
+
+            if (nearbyPositionsList && nearbyPositionsList.length > 0) {
+                nearbyPositionsList.forEach(nearbyPosition => {
+                    const squareBounds = new google.maps.LatLngBounds();
+                    nearbyPosition.forEach(point => {
+                        squareBounds.extend({
+                            lat: point.latitude,
+                            lng: point.longitude
                         });
                     });
 
-                    const rectangleCoords = 
-                    [
-                        { 
-                            lat: positionBounds.getNorthEast().lat(), 
-                            lng: positionBounds.getNorthEast().lng() 
-                        },
-                        { 
-                            lat: positionBounds.getNorthEast().lat(), 
-                            lng: positionBounds.getSouthWest().lng() 
-                        },
-                        { 
-                            lat: positionBounds.getSouthWest().lat(), 
-                            lng: positionBounds.getSouthWest().lng() 
-                        },
-                        { 
-                            lat: positionBounds.getSouthWest().lat(), 
-                            lng: positionBounds.getNorthEast().lng() 
+                    const rectangleCoords = [{
+                            lat: squareBounds.getNorthEast().lat(),
+                            lng: squareBounds.getNorthEast().lng()
+                        }, {
+                            lat: squareBounds.getNorthEast().lat(),
+                            lng: squareBounds.getSouthWest().lng()
+                        }, {
+                            lat: squareBounds.getSouthWest().lat(),
+                            lng: squareBounds.getSouthWest().lng()
+                        }, {
+                            lat: squareBounds.getSouthWest().lat(),
+                            lng: squareBounds.getNorthEast().lng()
                         }
                     ];
 
-                    const nearPositionsSquare = new google.maps.Polygon(
-                    {
+                    const square = new google.maps.Polygon({
                         paths: rectangleCoords,
                         strokeColor: '#FF0000',
                         strokeOpacity: 0.8,
@@ -108,34 +172,14 @@
                         fillOpacity: 0.15,
                         map: map
                     });
+                    activePolygons.push(square);
                 });
-            } 
-            else 
-            {
-                console.log("Nenhuma posição perto identificada para desenhar quadrados.");
-            }
 
-            if (allPoints && allPoints.length > 0) 
-            {
-                map.fitBounds(bounds, 50);
-            } 
-            else if (nearPositions && nearPositions.length > 0)
-            {
-                const allNearPositionsBounds = new google.maps.LatLngBounds();
-                nearPositions.forEach(position => 
-                {
-                    position.forEach(point => 
-                    {
-                        allNearPositionsBounds.extend(
-                        { 
-                            lat: point.latitude, 
-                            lng: point.longitude 
-                        });
-                    });
-                });
-                map.fitBounds(allNearPositionsBounds, 50);
+            } else {
+                console.log("Nenhuma lista de posições próximas fornecida ou está vazia para desenhar.");
             }
         };
+
     </script>
 </body>
 </html>
