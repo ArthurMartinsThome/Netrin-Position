@@ -9,9 +9,9 @@ namespace Netrin.Position.Application.Service
     {
         private readonly IPositionDataSource _dataSource;
 
-        public PositionService()
+        public PositionService(IPositionDataSource dataSource)
         {
-            _dataSource = new Netrin.Position.Adapter.MySql.DataSource.PositionDataSource();
+            _dataSource = dataSource;
         }
 
         private IEnumerable<Filter> GetFilters(PositionFilter filter)
@@ -83,7 +83,7 @@ namespace Netrin.Position.Application.Service
         {
             try
             {
-                if (!oldObj.Id.HasValue || oldObj.Id == 0)
+                if (oldObj == null || !oldObj.Id.HasValue || oldObj.Id <= 0)
                     return new DefaultResult<bool>(false, System.Net.HttpStatusCode.InternalServerError, message: $"Falta referenciar qual o id para editar a posição. - Update: oldPosition.Id == null");
 
                 var filter = new PositionFilter() { Id = oldObj.Id };

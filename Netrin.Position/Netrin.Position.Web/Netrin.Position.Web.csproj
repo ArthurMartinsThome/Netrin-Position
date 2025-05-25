@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Netrin.Position.Adapter.MySql\Netrin.Position.Adapter.MySql.csproj" />
     <ProjectReference Include="..\Netrin.Position.Application\Netrin.Position.Application.csproj" />
     <ProjectReference Include="..\Netrin.Position.Domain\Netrin.Position.Domain.csproj" />
   </ItemGroup>

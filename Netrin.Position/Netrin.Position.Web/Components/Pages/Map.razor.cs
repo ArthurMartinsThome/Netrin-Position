@@ -17,7 +17,7 @@ namespace Netrin.Position.Web.Components.Pages
         private List<Domain.Model.Position> positions = new();
         private List<List<Domain.Model.Position>> nearPositions = new();
 
-        private PositionService _positionService = new();
+        private PositionService _positionService = new(new Netrin.Position.Adapter.MySql.DataSource.PositionDataSource());
 
         protected override async Task OnInitializedAsync()
         {

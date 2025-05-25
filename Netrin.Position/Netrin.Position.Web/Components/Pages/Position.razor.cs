@@ -10,7 +10,7 @@ namespace Netrin.Position.Web.Components.Pages
         private bool onlyActive = true;
         private string? errorMessage;
 
-        private PositionService _positionService = new();
+        private PositionService _positionService = new(new Netrin.Position.Adapter.MySql.DataSource.PositionDataSource());
 
         protected override async Task OnInitializedAsync()
         {
@@ -18,7 +18,7 @@ namespace Netrin.Position.Web.Components.Pages
             try
             {
                 currentPosition = new Domain.Model.Position();
-                _positionService = new PositionService();
+                _positionService = new PositionService(new Netrin.Position.Adapter.MySql.DataSource.PositionDataSource());
                 await LoadPositions();
             }
             catch (Exception ex)
